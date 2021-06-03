@@ -1,0 +1,39 @@
+* DOM-Search
+  Additional utilities for searching the DOM.
+
+  Collect multiple nodes through a shallow search.
+  For tags, ~eq~ is being utilized to determine equality.
+  - ~dom-collect-children-by-tag~
+
+  Locate a single node through a shallow search.
+  As soon as the node has been found, it should be returned immediately.
+  For tags, ~eq~ is being utilized to determine equality.
+  - ~dom-find-child-by-tag~
+  - ~dom-find-child-by-attr~
+  - ~dom-find-child-by-class~
+
+  Locate a single node through a deep search.
+  As soon as the node has been found, it should be returned immediately.
+  For tags, ~eq~ is being utilized to determine equality.
+  - ~dom-find-descendant-by-tag~
+
+  Locate a single node through a deep search.
+  As soon as the node has been found, it should be returned immediately.
+  When trimmed, a node attribute being matched upon should be identical to the ~MATCH~ argument.
+  This means ~string=~ is being utilized to determine equality.
+  - ~dom-find-descendant-by-attr~
+  - ~dom-find-descendant-by-class~
+  - ~dom-find-descendant-by-id~
+
+  Locate a single node through a deep search.
+  As soon as the node has been found, it should be returned immediately.
+  A node attribute under examination should successfully match against the ~MATCH~ argument.
+  This means ~string-match~ is being utilized to determine equality.
+  - ~dom-find-descendant-by-attr-match~
+  - ~dom-find-descendant-by-class-match~
+  - ~dom-find-descendant-by-id-match~
+
+  Locate a single node through a series of nested shallow queries.
+  Each query states that a given attribute should be equal to a given value.
+  This is useful when you are looking for a specific node at a given depth.
+  - ~dom-descend~
