@@ -4,7 +4,7 @@
 
 ;; Author: Conjunctive <conjunctive@protonmail.com>
 ;; Keywords: dom html web
-;; Version: 0.0.1
+;; Version: 0.0.2
 ;; URL: https://github.com/conjunctive/dom-search
 ;; Package-Requires: ((emacs "27") s)
 
@@ -95,7 +95,8 @@ The input will be trimmed prior to the equality check."
   (when (and dom (listp dom))
     (cl-loop for child in (dom-children dom)
              when (and (not (stringp child))
-                       (string= match (s-trim (dom-attr child attr))))
+                       (when-let ((attr-val (dom-attr child attr)))
+                         (string= match (s-trim attr-val))))
              return child)))
 
 (defsubst dom-find-child-by-class (match dom)
@@ -108,14 +109,13 @@ The input will be trimmed prior to the equality check."
 (defun dom-find-descendant-by-tag (tag dom)
   "Perform a deep search of the DOM tree.
 Return the first descendant node of the provided TAG."
-  (let ()
-    (if (eq tag (dom-tag dom))
-        dom
-      (cl-loop for child in (dom-children dom)
-               for matches = (and (not (stringp child))
-                                  (dom-find-child-by-tag tag child))
-               when matches
-               return matches))))
+  (if (eq tag (dom-tag dom))
+      dom
+    (cl-loop for child in (dom-children dom)
+             for matches = (and (not (stringp child))
+                                (dom-find-descendant-by-tag tag child))
+             when matches
+             return matches)))
 
 (defun dom-find-descendant-by-attr (attr match dom)
   "Perform a deep search of the DOM tree.
@@ -127,7 +127,7 @@ The input will be trimmed prior to the equality check."
         dom
       (cl-loop for child in (dom-children dom)
                for matches = (and (not (stringp child))
-                                  (dom-find-child-by-attr attr match child))
+                                  (dom-find-descendant-by-attr attr match child))
                when matches
                return matches))))
 
@@ -139,7 +139,7 @@ Return the first descendant node where the provided ATTR matches the regex MATCH
         dom
       (cl-loop for child in (dom-children dom)
                for matches = (and (not (stringp child))
-                                  (dom-find-descendant-by-attr attr match child))
+                                  (dom-find-descendant-by-attr-match attr match child))
                when matches
                return matches))))
 
